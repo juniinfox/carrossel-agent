@@ -605,7 +605,7 @@ async function analisarURL() {
     const resp = await fetch('/api/proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-       apiKey: getApiKey(),
+      body: JSON.stringify({ apiKey: getApiKey(),
         model: 'claude-sonnet-4-20250514',
         max_tokens: 600,
         system: `Você é um especialista em copywriting e análise de produtos digitais.
@@ -668,7 +668,7 @@ async function gerarCarrossel() {
     const response = await fetch('/api/proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-       apiKey: getApiKey(),
+      body: JSON.stringify({ apiKey: getApiKey(),
         model: 'claude-sonnet-4-20250514',
         max_tokens: 8000,
         system: systemPrompt,
@@ -1062,7 +1062,7 @@ document.getElementById('setupBtn').addEventListener('click', async () => {
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
-       apiKey: getApiKey(), model: 'claude-haiku-4-5-20251001', max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] })
+      body: JSON.stringify({ apiKey: getApiKey(), model: 'claude-haiku-4-5-20251001', max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] })
     });
     if (r.status === 401) {
       errEl.textContent = 'Chave inválida ou sem permissão na Anthropic';
@@ -1094,6 +1094,17 @@ document.getElementById('setupInput').addEventListener('keydown', e => {
 // Patch window.fetch to inject API key in Anthropic calls automatically
 const _origFetch = window.fetch;
 window.fetch = function(url, opts) {
+  opts = opts || {};
+  if (typeof url === 'string' && url.includes('api.anthropic.com')) {
+    const key = getApiKey();
+    if (key) {
+      opts.headers = Object.assign({}, opts.headers || {}, {
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      });
+    }
+  }
   return _origFetch.call(this, url, opts);
 };
 
@@ -1212,7 +1223,7 @@ async function salvarChave() {
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
-       apiKey: getApiKey(),
+      body: JSON.stringify({ apiKey: getApiKey(),
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 5,
         messages: [{ role: 'user', content: 'hi' }]
