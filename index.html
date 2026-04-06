@@ -602,10 +602,10 @@ async function analisarURL() {
   txt.textContent = 'Analisando URL...';
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('/api/proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ apiKey: getApiKey(),
+       apiKey: getApiKey(),
         model: 'claude-sonnet-4-20250514',
         max_tokens: 600,
         system: `Você é um especialista em copywriting e análise de produtos digitais.
@@ -665,10 +665,10 @@ async function gerarCarrossel() {
     progressSteps(2);
     setStatus('working', 'Criando copy viral...');
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const response = await fetch('/api/proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ apiKey: getApiKey(),
+       apiKey: getApiKey(),
         model: 'claude-sonnet-4-20250514',
         max_tokens: 8000,
         system: systemPrompt,
@@ -1054,7 +1054,7 @@ document.getElementById('setupBtn').addEventListener('click', async () => {
   btn.textContent = 'Verificando...';
 
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch('/api/proxy', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1062,7 +1062,7 @@ document.getElementById('setupBtn').addEventListener('click', async () => {
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
-      body: JSON.stringify({ apiKey: getApiKey(), model: 'claude-haiku-4-5-20251001', max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] })
+       apiKey: getApiKey(), model: 'claude-haiku-4-5-20251001', max_tokens: 5, messages: [{ role: 'user', content: 'hi' }] })
     });
     if (r.status === 401) {
       errEl.textContent = 'Chave inválida ou sem permissão na Anthropic';
@@ -1204,7 +1204,7 @@ async function salvarChave() {
   btn.textContent = 'Verificando...';
 
   try {
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const r = await fetch('/api/proxy', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1212,7 +1212,7 @@ async function salvarChave() {
         'anthropic-version': '2023-06-01',
         'anthropic-dangerous-direct-browser-access': 'true'
       },
-      body: JSON.stringify({ apiKey: getApiKey(),
+       apiKey: getApiKey(),
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 5,
         messages: [{ role: 'user', content: 'hi' }]
